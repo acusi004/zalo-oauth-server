@@ -56,3 +56,8 @@ app.get('/zalo_verifierUlAT1P_tDLDPmxrDckqBJ4xUdH6Yg4jDEJSp.html', (req, res) =>
     </html>
   `);
 });
+app.post('/oa/callback', express.json(), (req, res) => {
+  console.log('OA Callback:', req.body);
+  res.sendStatus(200); // Zalo yêu cầu phản hồi 200
+});
+
