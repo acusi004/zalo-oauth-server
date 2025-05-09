@@ -60,7 +60,7 @@ app.post('/oa/callback', express.json(), (req, res) => {
   console.log('OA Callback:', req.body);
   res.sendStatus(200); // Zalo yêu cầu phản hồi 200
 });
-const axios = require('axios');
+
 const code_verifier = 'Ch_B7s2tUMBcN5vUroYgCFwBeIbhuZN7lmfGBt6Ru6o'; // đúng code_verifier bạn đã dùng
 
 app.get('/login/zalo', async (req, res) => {
