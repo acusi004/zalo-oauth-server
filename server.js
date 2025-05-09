@@ -12,39 +12,35 @@ app.get('/login/zalo', async (req, res) => {
   if (!code) return res.status(400).send('Thiếu code từ Zalo');
 
   try {
-    // 1) Lấy access_token
     const tokenRes = await axios.post('https://oauth.zaloapp.com/v4/access_token', {
       app_id: APP_ID,
+      app_secret: APP_SECRET,
       grant_type: 'authorization_code',
       code,
       code_verifier,
       redirect_uri: REDIRECT_URI
     });
-    const access_token = tokenRes.data.access_token;
-    console.log('✅ access_token:', access_token);
 
-    // 2) Tạo appsecret_proof
+    console.log('↪ tokenRes.data =', JSON.stringify(tokenRes.data, null, 2));
+    const tokenPayload = tokenRes.data.data || tokenRes.data;
+    const access_token = tokenPayload.access_token;
+    console.log('✅ access_token =', access_token);
+
     const proof = crypto
       .createHmac('sha256', APP_SECRET)
       .update(access_token)
       .digest('hex');
 
-    // 3) Gọi Graph API lấy thông tin user
     const userRes = await axios.get('https://graph.zalo.me/v2.0/me', {
       params: { access_token, appsecret_proof: proof }
     });
 
-    return res.json({
-      message: 'Đăng nhập thành công!',
-      user: userRes.data
-    });
+    return res.json({ message: 'Đăng nhập thành công!', user: userRes.data });
   } catch (err) {
-    console.error('❌ Lỗi:', err.response?.data || err.message);
-    return res.status(500).json({
-      message: 'Lỗi khi lấy access_token hoặc user',
-      error: err.response?.data || err.message
-    });
+    console.error('❌ Lỗi khi gọi access_token/me:', err.response?.data || err.message);
+    return res.status(500).json({ error: err.response?.data || err.message });
   }
 });
+
 
 app.listen(process.env.PORT||3000, () => console.log('Server running'));
