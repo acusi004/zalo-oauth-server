@@ -43,3 +43,16 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+app.get('/zalo_verifierUlAT1P_tDLDPmxrDckqBJ4xUdH6Yg4jDEJSp.html', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta property="zalo-platform-site-verification" content="UlAT1P_tDLDPmxrDckqBJ4xUdH6Yg4jDEJSp" />
+    </head>
+    <body>
+      There Is No Limit To What You Can Accomplish Using Zalo!
+    </body>
+    </html>
+  `);
+});
